@@ -55,6 +55,18 @@ python launch.py --exp-name test --command "python your_file.py" --num-nodes 3 -
 * `--load-env`: The command to setup your environment. For example: `module load cuda/10.1`. Default: "".
 
 
+### The procedure
+
+The sbatch script does the following things:
+
+1. It fetches the list of computing nodes and their IP addresses.
+2. It launches a head ray process in one of the node, and get the address of the head node.
+3. It launches ray processes in (n-1) worker nodes and connects them to the head node by providing the head node address.
+4. It submit the user specified task to ray.
+
+Since all n nodes have launched their own ray processes, and they are all connected to the head node's ray process, 
+ray cluster will perform resources allocation as in other cluster.
+
 ### Misc
 
 1. It works well with ray 1.0.0, feel free to open issue if you find it doesn't work.
