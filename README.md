@@ -11,6 +11,9 @@ cd use-ray-with-slurm
 
 # Please make sure you have install ray first!
 python launch.py --exp-name test --command "echo 1"
+
+# or a RLLib task:
+python launch.py --exp-name test --command "rllib train --run PPO --env CartPole-v0"
 ```
 
 The above command will launch a ray cluster within slurm cluster with 1 computing node. 
