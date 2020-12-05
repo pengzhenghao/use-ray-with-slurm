@@ -33,9 +33,11 @@ if __name__ == '__main__':
     parser.add_argument(
         "--exp-name", type=str, required=True, help="The job name and path to logging file (exp_name.log)."
     )
-    parser.add_argument("--num-nodes", type=int, default=1, help="Number of nodes to use.")
+    parser.add_argument("--num-nodes", "-n", type=int, default=1, help="Number of nodes to use.")
     parser.add_argument("--node", "-w", type=str, default="", help="A specify node to use")
-    parser.add_argument("--num-cpus", type=int, default=64, help="Number of CPUs to use in each node. (Default: 64)")
+    parser.add_argument("--num-cpus", type=int, default=64,
+                        help="Deprecated. Number of CPUs to use in each node. "
+                             "(Default: 64) Slurm will ignore this setting.")
     parser.add_argument("--num-gpus", type=int, default=0, help="Number of GPUs to use in each node. (Default: 8)")
     parser.add_argument(
         "--partition",
