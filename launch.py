@@ -17,7 +17,7 @@ import subprocess
 import sys
 import time
 
-template_file = osp.join(osp.dirname(__file__), "slurm", "sbatch_template.sh")
+template_file = osp.join(osp.dirname(__file__), "sbatch_template.sh")
 JOB_NAME = "{{JOB_NAME}}"
 NUM_NODES = "{{NUM_NODES}}"
 NUM_CPUS_PER_NODE = "{{NUM_CPUS_PER_NODE}}"
