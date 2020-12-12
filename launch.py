@@ -31,26 +31,35 @@ LOAD_ENV = "{{LOAD_ENV}}"
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--exp-name", type=str, required=True, help="The job name and path to logging file (exp_name.log)."
+        "--exp-name", type=str, required=True,
+        help="The job name and path to logging file (exp_name.log)."
     )
-    parser.add_argument("--num-nodes", "-n", type=int, default=1, help="Number of nodes to use.")
-    parser.add_argument("--node", "-w", type=str, default="", help="A specify node to use")
-    parser.add_argument("--num-cpus", type=int, default=64,
-                        help="Deprecated. Number of CPUs to use in each node. "
-                             "(Default: 64) Slurm will ignore this setting.")
-    parser.add_argument("--num-gpus", type=int, default=0, help="Number of GPUs to use in each node. (Default: 8)")
     parser.add_argument(
-        "--partition",
-        "-p",
-        type=str,
-        default="chpc",
+        "--num-nodes", "-n", type=int, default=1,
+        help="Number of nodes to use."
     )
-    parser.add_argument("--load-env", type=str, default="",
-                        help="The script to load your environment, e.g. 'module load cuda/10.1'")
     parser.add_argument(
-        "--command",
-        type=str,
-        required=True,
+        "--node", "-w", type=str, default="",
+        help="A specify node to use"
+    )
+    parser.add_argument(
+        "--num-cpus", type=int, default=64,
+        help="Deprecated. Number of CPUs to use in each node. "
+             "(Default: 64) Slurm will ignore this setting."
+    )
+    parser.add_argument(
+        "--num-gpus", type=int, default=0,
+        help="Number of GPUs to use in each node. (Default: 8)"
+    )
+    parser.add_argument(
+        "--partition", "-p", type=str, default="chpc",
+    )
+    parser.add_argument(
+        "--load-env", type=str, default="",
+        help="The script to load your environment, e.g. 'module load cuda/10.1'"
+    )
+    parser.add_argument(
+        "--command", type=str, required=True,
         help="The command you wish to execute. For example: --command 'python "
              "test.py' Note that the command must be a string."
     )
@@ -62,7 +71,10 @@ if __name__ == '__main__':
     else:
         node_info = ""
 
-    job_name = "{}_{}".format(args.exp_name, time.strftime("%m%d-%H%M", time.localtime()))
+    job_name = "{}_{}".format(
+        args.exp_name,
+        time.strftime("%m%d-%H%M", time.localtime())
+    )
 
     # ===== Modified the template script =====
     with open(template_file, "r") as f:
@@ -78,8 +90,9 @@ if __name__ == '__main__':
     text = text.replace(COMMAND_SUFFIX, "")
     text = text.replace(
         "# THIS FILE IS A TEMPLATE AND IT SHOULD NOT BE DEPLOYED TO "
-        "PRODUCTION!", "# THIS FILE IS MODIFIED AUTOMATICALLY FROM TEMPLATE AND SHOULD BE "
-                       "RUNNABLE!"
+        "PRODUCTION!",
+        "# THIS FILE IS MODIFIED AUTOMATICALLY FROM TEMPLATE AND SHOULD BE "
+        "RUNNABLE!"
     )
 
     # ===== Save the script =====
@@ -90,5 +103,8 @@ if __name__ == '__main__':
     # ===== Submit the job =====
     print("Start to submit job!")
     subprocess.Popen(["sbatch", script_file])
-    print("Job submitted! Script file is at: <{}>. Log file is at: <{}>".format(script_file, "{}.log".format(job_name)))
+    print(
+        "Job submitted! Script file is at: <{}>. Log file is at: <{}>".format(
+            script_file, "{}.log".format(job_name))
+    )
     sys.exit(0)
