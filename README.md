@@ -72,3 +72,4 @@ ray cluster will perform resources allocation as in other cluster.
 1. It works well with ray 1.0.0, feel free to open issue if you find it doesn't work.
 2. Feel free to copy the script to your own projects.
 3. This script is compatible with both IPV4 and IPV6 ip address of the computing nodes.
+4. This project is inspired by [Yet Another Slurm Python Interface](https://github.com/albanie/yaspi) and [Ray sbatch submission](https://github.com/NERSC/slurm-ray-cluster) scripts used at NERSC.
