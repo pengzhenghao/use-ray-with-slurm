@@ -1,26 +1,17 @@
-"""
-Usage:
-
-    python launch.py \
-        --exp-name my_experiment \
-        --num-gpus 0 \
-        --num-nodes 3 \
-        --command 'python -m my_package.my_script' \
-        -p PARTITION \
-        --node NODE_NAMES
-
-"""
+# launch.py
+# Usage: python launch.py --exp-name test --command "rllib train --run PPO --env CartPole-v0"
 
 import argparse
-import os.path as osp
 import subprocess
 import sys
 import time
 
-template_file = osp.join(osp.dirname(__file__), "sbatch_template.sh")
+from pathlib import Path
+
+template_file = Path(__file__) / 'sbatch_template.sh'
+
 JOB_NAME = "{{JOB_NAME}}"
 NUM_NODES = "{{NUM_NODES}}"
-NUM_CPUS_PER_NODE = "{{NUM_CPUS_PER_NODE}}"
 NUM_GPUS_PER_NODE = "{{NUM_GPUS_PER_NODE}}"
 PARTITION_NAME = "{{PARTITION_NAME}}"
 COMMAND_PLACEHOLDER = "{{COMMAND_PLACEHOLDER}}"
@@ -40,16 +31,11 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         "--node", "-w", type=str, default="",
-        help="A specify node to use"
-    )
-    parser.add_argument(
-        "--num-cpus", type=int, default=64,
-        help="Deprecated. Number of CPUs to use in each node. "
-             "(Default: 64) Slurm will ignore this setting."
+        help="The specified nodes to use. Same format as the return of 'sinfo'. Default: ''."
     )
     parser.add_argument(
         "--num-gpus", type=int, default=0,
-        help="Number of GPUs to use in each node. (Default: 8)"
+        help="Number of GPUs to use in each node. (Default: 0)"
     )
     parser.add_argument(
         "--partition", "-p", type=str, default="chpc",
@@ -81,7 +67,6 @@ if __name__ == '__main__':
         text = f.read()
     text = text.replace(JOB_NAME, job_name)
     text = text.replace(NUM_NODES, str(args.num_nodes))
-    text = text.replace(NUM_CPUS_PER_NODE, str(args.num_cpus))
     text = text.replace(NUM_GPUS_PER_NODE, str(args.num_gpus))
     text = text.replace(PARTITION_NAME, str(args.partition))
     text = text.replace(COMMAND_PLACEHOLDER, str(args.command))
